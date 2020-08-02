@@ -12,14 +12,15 @@
 #     name: python3
 # ---
 
+#%%
 # import library
 import numpy as np
 import pandas as pd
 import yfinance as yf
 import matplotlib.pyplot as plt
 import seaborn as sns
-%matplotlib inline
 
+#%%
 # get stock info by Yahoo!Finance
 # data will get from 7/31/2019 to 7/31/2020
 # path
@@ -34,6 +35,7 @@ while True:
         nyse_hist = nyse.history(period="365d")
         nyse_hist.to_csv(p + "/Data/NYSE.csv")
 
+#%%
 # get covid-19 info
 # https://www.kaggle.com/allen-institute-for-ai/CORD-19-research-challenge/discussion/141607
 # https://towardsdatascience.com/covid-19-data-collection-a-python-api-story-347aafa95e69
@@ -70,6 +72,7 @@ def covid_19_data_collection(countries=["US", "FR"]):
 
 countries = ["US", "FR"]
 covid_df = covid_19_data_collection(countries)
+#%%
 # get unployment rate US information
 # https://www.bls.gov/developers/api_python.htm
 # Unemployment Rate - LNS14000000
@@ -95,29 +98,8 @@ def unemployment_rate(start_year=2019, end_year=2020):
     result = pd.DataFrame.from_dict(json_data["Results"]["series"][0]["data"])
     return result
 
+
 unemployment_df = unemployment_rate(2000, 2020)
+#%%
 
-# Get business cycle:
-# Business cycle is the data/graph of movement in GDP around its long-term growth trend
-# https://codingandfun.com/economic-indicators-with-python/
-def checkindicator(url):
-    import requests
-    import json
-    r= requests.get(url)
-    r = r.json()
-    periods = r['series']['docs'][0]['period']
-    values = r['series']['docs'][0]['value']
-    dataset = r['series']['docs'][0]['dataset_name']
-
-    indicators = pd.DataFrame(values,index=periods)
-    indicators.columns = [dataset]
-    return indicators   
-
-GDPgrowth = checkindicator('https://api.db.nomics.world/v22/series/WB/WDI/NY.GDP.MKTP.KD.ZG-EU?observations=1')
-
-## Visualize the data
-# NYSE price from 2019 to 2020
-
-nyse_plot = sns.lineplot(x="Date", y="Close", data=nyse_hist)
-
-# 
+#%%
